@@ -3,10 +3,10 @@
 import tkinter as tk
 from tkinter import ttk
 from .tab_button import TabButton
-from .search_bar import SearchBar
+
 
 class TabBar(ttk.Frame):
-    MAX_TABS = 6  # Define the maximum number of tabs
+    MAX_TABS = 8  # Define the maximum number of tabs
 
     def __init__(self, parent):
         super().__init__(parent)
@@ -14,10 +14,6 @@ class TabBar(ttk.Frame):
 
         self.tabs_frame = tk.Frame(self)
         self.tabs_frame.pack(side=tk.LEFT, fill=tk.X, expand=True)
-
-        # Initialize search bar
-        self.search_bar = SearchBar(self)
-        self.search_bar.pack(side=tk.RIGHT, padx=10)
 
         # Add New Tab Button
         self.add_tab_button = ttk.Button(self, text="+", command=self.add_new_tab, width=2, padding=5)

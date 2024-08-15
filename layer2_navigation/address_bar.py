@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import os
 
+
 class AddressBar(ttk.Frame):
     def __init__(self, parent, initial_path):
         super().__init__(parent)
@@ -11,8 +12,8 @@ class AddressBar(ttk.Frame):
 
         # Create and pack the text box for showing and editing the current path
         self.path_var = tk.StringVar(value=self.current_path)
-        self.path_entry = ttk.Entry(self, textvariable=self.path_var, width=100)
-        self.path_entry.pack(fill=tk.X, padx=5, pady=5)
+        self.path_entry = ttk.Entry(self, textvariable=self.path_var, width=75)
+        self.path_entry.pack(padx=5, pady=5, fill=tk.X)
         
         # Bind the Enter key to trigger path change
         self.path_entry.bind("<Return>", self.change_directory)

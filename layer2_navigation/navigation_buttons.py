@@ -4,6 +4,7 @@ import tkinter as tk
 from tkinter import ttk
 import os
 
+
 class NavigationButtons(ttk.Frame):
     def __init__(self, parent, home_directory, address_bar_callback):
         super().__init__(parent)

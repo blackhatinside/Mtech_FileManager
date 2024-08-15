@@ -5,6 +5,7 @@ from tkinter import ttk
 from layer1_tab_bar.tab_bar import TabBar
 from layer2_navigation.navigation_buttons import NavigationButtons
 from layer2_navigation.address_bar import AddressBar
+from layer1_tab_bar.search_bar import SearchBar
 
 
 class FileManagerApp(tk.Tk):
@@ -26,12 +27,16 @@ class FileManagerApp(tk.Tk):
         # Initialize TabBar (Layer 1), Address Bar (Layer 1), NavigationButtons (Layer 2)
         self.tab_bar = TabBar(tab_frame)
 
+        # Initialize Navigation bar
         self.address_bar = AddressBar(nav_frame, initial_path=home_directory)
         self.navigation_buttons = NavigationButtons(nav_frame, home_directory, self.address_bar.update_address)
 
         self.navigation_buttons.pack(side=tk.LEFT, fill=tk.X)
-        self.address_bar.pack(side=tk.LEFT, fill=tk.X, padx=5, expand=True)
+        self.address_bar.pack(side=tk.LEFT, padx=5, fill=tk.X)
 
+        # Initialize Search bar
+        self.search_bar = SearchBar(nav_frame)
+        self.search_bar.pack(side=tk.RIGHT, padx=5, fill=tk.X)
 
 if __name__ == "__main__":
     app = FileManagerApp()

@@ -3,6 +3,7 @@
 import tkinter as tk
 from tkinter import ttk
 
+
 class SearchBar(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent, style='TFrame')
@@ -12,7 +13,7 @@ class SearchBar(ttk.Frame):
         # Create the search box (Entry widget)
         self.search_box = ttk.Entry(self, textvariable=self.search_var)
         self.search_box.insert(0, "Search...")
-        self.search_box.pack(side=tk.RIGHT, padx=10, fill=tk.X, expand=True)
+        self.search_box.pack(padx=10, fill=tk.X)
         
         # Bind focus event to clear default text
         self.search_box.bind("<FocusIn>", self.clear_default_text)
