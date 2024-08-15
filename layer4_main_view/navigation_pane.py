@@ -3,26 +3,55 @@
 import tkinter as tk
 from tkinter import ttk
 
-
 class NavigationPane(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
-        
-        # Set the title for the Navigation Pane
-        self.title_label = ttk.Label(self, text="Bookmarks", font=("Helvetica", 12, "bold"))
-        self.title_label.pack(side=tk.TOP, anchor=tk.W, padx=10, pady=5)
-        
-        # Create a Listbox to hold the bookmarks
-        self.bookmark_listbox = tk.Listbox(self, height=20)
-        self.bookmark_listbox.pack(side=tk.TOP, fill=tk.BOTH, expand=True, padx=10, pady=5)
-        
-        # Add some sample bookmarks (This will be updated with actual bookmarks later)
-        sample_bookmarks = ["C:\\Users\\Public", "C:\\Program Files", "C:\\Windows"]
-        for bookmark in sample_bookmarks:
-            self.bookmark_listbox.insert(tk.END, bookmark)
+        self.bookmarks = []  # List to store bookmarks
 
-        # Add scrollbars to the Listbox
-        self.scrollbar = ttk.Scrollbar(self, orient=tk.VERTICAL, command=self.bookmark_listbox.yview)
-        self.bookmark_listbox.config(yscrollcommand=self.scrollbar.set)
-        self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
+        # Title and '+' button for Bookmarks
+        title_frame = ttk.Frame(self)
+        title_frame.pack(fill=tk.X, padx=10, pady=5)
 
+        title_label = ttk.Label(title_frame, text="Bookmarks")
+        title_label.pack(side=tk.LEFT)
+
+        add_button = ttk.Button(title_frame, text="+", width=2, command=self.add_bookmark)
+        add_button.pack(side=tk.RIGHT)
+
+        # Frame to hold the list of bookmarks
+        self.bookmark_list_frame = ttk.Frame(self)
+        self.bookmark_list_frame.pack(fill=tk.BOTH, expand=True, padx=10)
+
+    def add_bookmark(self):
+        # Placeholder for add bookmark functionality
+        print("Add bookmark functionality will be implemented here")
+
+    def remove_bookmark(self, bookmark):
+        # Placeholder for remove bookmark functionality
+        print(f"Remove bookmark functionality will be implemented for {bookmark}")
+
+    def refresh_bookmarks(self):
+        for widget in self.bookmark_list_frame.winfo_children():
+            widget.destroy()
+
+        for bookmark in self.bookmarks:
+            bookmark_frame = ttk.Frame(self.bookmark_list_frame)
+            bookmark_frame.pack(fill=tk.X, pady=2)
+
+            bookmark_label = ttk.Label(bookmark_frame, text=bookmark)
+            bookmark_label.pack(side=tk.LEFT, padx=5)
+
+            remove_button = ttk.Button(bookmark_frame, text="-", width=2, 
+                                       command=lambda b=bookmark: self.remove_bookmark(b))
+            remove_button.pack(side=tk.RIGHT, padx=5)
+
+# Usage in the main view
+if __name__ == "__main__":
+    root = tk.Tk()
+    root.title("Navigation Pane Test")
+    root.geometry("300x400")
+
+    nav_pane = NavigationPane(root)
+    nav_pane.pack(fill=tk.BOTH, expand=True)
+
+    root.mainloop()

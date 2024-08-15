@@ -36,12 +36,16 @@ class MainView(ttk.Frame):
         # Load initial directory
         self.load_directory("C:\\")  # This can be updated later to reflect the actual directory
 
+        # Bind single click event
+        self.tree.bind("<ButtonRelease-1>", self.on_item_click)
+
     def load_directory(self, path):
         # Clear the treeview
         for item in self.tree.get_children():
             self.tree.delete(item)
         
         # Get the list of files and directories
+        entries = []
         try:
             for entry in os.scandir(path):
                 if entry.is_dir():
@@ -50,10 +54,22 @@ class MainView(ttk.Frame):
                     file_type = "File"
                 
                 size = entry.stat().st_size
-                created_on = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(entry.stat().st_ctime))
-                
-                # Insert into the treeview
-                self.tree.insert("", tk.END, values=(entry.name, size, created_on, file_type))
+                created_on = entry.stat().st_ctime
+                entries.append((entry.name, size, created_on, file_type))
+        
+            # Sort entries: Folders first, then Files, sorted by created_on (descending)
+            entries.sort(key=lambda x: (x[3], -x[2]))  # Sorting by type and creation time
+            
+            # Insert into the treeview
+            for entry in entries:
+                created_on = time.strftime('%d-%m-%Y %H:%M:%S', time.localtime(entry[2]))
+                self.tree.insert("", tk.END, values=(entry[0], entry[1], created_on, entry[3]))
+        
         except PermissionError:
             print(f"Permission denied: {path}")
 
+    def on_item_click(self, event):
+        item = self.tree.selection()
+        if item:
+            item_values = self.tree.item(item[0], 'values')
+            print(f"Selected: {item_values}")
