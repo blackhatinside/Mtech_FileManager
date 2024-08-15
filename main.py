@@ -3,8 +3,8 @@
 import tkinter as tk
 from tkinter import ttk
 from layer1_tab_bar.tab_bar import TabBar
-from layer1_tab_bar.search_bar import SearchBar
 from layer2_navigation.navigation_buttons import NavigationButtons
+from layer2_navigation.address_bar import AddressBar
 
 
 class FileManagerApp(tk.Tk):
