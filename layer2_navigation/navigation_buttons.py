@@ -5,29 +5,30 @@ from tkinter import ttk
 import os
 
 class NavigationButtons(ttk.Frame):
-    def __init__(self, parent, home_directory):
+    def __init__(self, parent, home_directory, address_bar_callback):
         super().__init__(parent)
 
         self.history = []  # List to keep track of visited directories
         self.current_index = -1  # To track the current position in the history
         self.home_directory = home_directory  # Set the home directory
+        self.address_bar_callback = address_bar_callback  # Callback to update the address bar
 
         # Backward Button
         self.back_button = ttk.Button(self, text="<", command=self.go_backward, width=2, padding=5)
         self.back_button.pack(side=tk.LEFT)
-        
+
         # Forward Button
         self.forward_button = ttk.Button(self, text=">", command=self.go_forward, width=2, padding=5)
         self.forward_button.pack(side=tk.LEFT)
-        
+
         # Previous Level Directory Button
         self.up_button = ttk.Button(self, text="↑", command=self.go_up_one_level, width=2, padding=5)
         self.up_button.pack(side=tk.LEFT)
-        
+
         # Home Directory Button
         self.home_button = ttk.Button(self, text="⌂", command=self.go_home, width=2, padding=5)
         self.home_button.pack(side=tk.LEFT)
-        
+
         # Disable buttons initially
         self.update_buttons_state()
 
@@ -65,8 +66,8 @@ class NavigationButtons(ttk.Frame):
 
     def navigate_to(self, path):
         print(f"Navigating to: {path}")
+        self.address_bar_callback(path)  # Update the address bar
         # Code to update the displayed content according to the path
-        # For now, we just print the path
 
     def update_buttons_state(self):
         # Disable/Enable Backward button

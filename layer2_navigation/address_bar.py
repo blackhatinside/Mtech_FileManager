@@ -11,7 +11,7 @@ class AddressBar(ttk.Frame):
 
         # Create and pack the text box for showing and editing the current path
         self.path_var = tk.StringVar(value=self.current_path)
-        self.path_entry = ttk.Entry(self, textvariable=self.path_var)
+        self.path_entry = ttk.Entry(self, textvariable=self.path_var, width=100)
         self.path_entry.pack(fill=tk.X, padx=5, pady=5)
         
         # Bind the Enter key to trigger path change
@@ -26,3 +26,6 @@ class AddressBar(ttk.Frame):
             # For now, we just print the new path
         else:
             messagebox.showerror("Invalid Path", "The path you entered does not exist or is not a directory.")
+
+    def update_address(self, path):
+        self.path_var.set(path)
