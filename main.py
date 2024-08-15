@@ -6,6 +6,9 @@ from layer1_tab_bar.tab_bar import TabBar
 from layer2_navigation.navigation_buttons import NavigationButtons
 from layer2_navigation.address_bar import AddressBar
 from layer1_tab_bar.search_bar import SearchBar
+from layer3_ribbon.ribbon import Ribbon
+from layer4_main_view.navigation_pane import NavigationPane
+from layer4_main_view.main_view import MainView
 
 
 class FileManagerApp(tk.Tk):
@@ -21,10 +24,22 @@ class FileManagerApp(tk.Tk):
         tab_frame = ttk.Frame(self)
         tab_frame.pack(side=tk.TOP, fill=tk.X)
 
+        separator1 = ttk.Separator(self, orient='horizontal')   # between tab_frame and nav_frame
+        separator1.pack(side=tk.TOP, fill=tk.X, pady=5)
+
         nav_frame = ttk.Frame(self)
         nav_frame.pack(side=tk.TOP, fill=tk.X)
 
-        # Initialize TabBar (Layer 1), Address Bar (Layer 1), NavigationButtons (Layer 2)
+        separator2 = ttk.Separator(self, orient='horizontal')   # between nav_frame and ribbon_frame
+        separator2.pack(side=tk.TOP, fill=tk.X, pady=5)
+
+        ribbon_frame = ttk.Frame(self)
+        ribbon_frame.pack(side=tk.TOP, fill=tk.X)
+
+        separator3 = ttk.Separator(self, orient='horizontal')
+        separator3.pack(side=tk.TOP, fill=tk.X, pady=5)
+
+        # Initialize TabBar (Layer 1), AddressBar (Layer 2), NavigationButtons (Layer 2), SearchBar (Layer 2)
         self.tab_bar = TabBar(tab_frame)
 
         # Initialize Navigation bar
@@ -37,6 +52,21 @@ class FileManagerApp(tk.Tk):
         # Initialize Search bar
         self.search_bar = SearchBar(nav_frame)
         self.search_bar.pack(side=tk.RIGHT, padx=5, fill=tk.X)
+
+        # Initialize Ribbon
+        self.ribbon = Ribbon(ribbon_frame)
+        self.ribbon.pack(side=tk.TOP, fill=tk.X)
+
+        # Initialize Layer 4: Navigation Pane and Main View
+        content_frame = ttk.Frame(self)
+        content_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
+
+        # Split content frame into Navigation Pane (25%) and Main View (75%)
+        self.navigation_pane = NavigationPane(content_frame)
+        self.navigation_pane.pack(side=tk.LEFT, fill=tk.Y, expand=False, padx=10, pady=5)
+
+        self.main_view = MainView(content_frame)
+        self.main_view.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=10, pady=5)
 
 if __name__ == "__main__":
     app = FileManagerApp()
