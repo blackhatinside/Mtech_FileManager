@@ -32,7 +32,7 @@ class FileManagerApp(tk.Tk):
         self.navigation_buttons = NavigationButtons(nav_frame, home_directory, self.address_bar.update_address)
 
         self.navigation_buttons.pack(side=tk.LEFT, fill=tk.X)
-        self.address_bar.pack(side=tk.LEFT, padx=5, fill=tk.X)
+        self.address_bar.pack(side=tk.LEFT, padx=5, fill=tk.X, expand=True)
 
         # Initialize Search bar
         self.search_bar = SearchBar(nav_frame)

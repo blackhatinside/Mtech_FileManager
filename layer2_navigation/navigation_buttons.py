@@ -16,7 +16,7 @@ class NavigationButtons(ttk.Frame):
 
         # Backward Button
         self.back_button = ttk.Button(self, text="<", command=self.go_backward, width=2, padding=5)
-        self.back_button.pack(side=tk.LEFT)
+        self.back_button.pack(side=tk.LEFT, padx=5)
 
         # Forward Button
         self.forward_button = ttk.Button(self, text=">", command=self.go_forward, width=2, padding=5)

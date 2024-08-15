@@ -11,9 +11,9 @@ class SearchBar(ttk.Frame):
         self.search_var = tk.StringVar()
         
         # Create the search box (Entry widget)
-        self.search_box = ttk.Entry(self, textvariable=self.search_var)
+        self.search_box = ttk.Entry(self, textvariable=self.search_var, width=25)
         self.search_box.insert(0, "Search...")
-        self.search_box.pack(padx=10, fill=tk.X)
+        self.search_box.pack(padx=5, fill=tk.X)
         
         # Bind focus event to clear default text
         self.search_box.bind("<FocusIn>", self.clear_default_text)
