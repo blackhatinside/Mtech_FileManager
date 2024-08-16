@@ -4,7 +4,6 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import os
 
-
 class AddressBar(ttk.Frame):
     def __init__(self, parent, initial_path, on_path_change=None):
         super().__init__(parent)
@@ -32,3 +31,7 @@ class AddressBar(ttk.Frame):
     def update_address(self, path):
         if self.path_var.get() != path:
             self.path_var.set(path)
+
+    def get_current_path(self):
+        return self.current_path
+

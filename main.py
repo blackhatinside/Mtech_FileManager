@@ -10,7 +10,6 @@ from layer3_ribbon.ribbon import Ribbon
 from layer4_main_view.navigation_pane import NavigationPane
 from layer4_main_view.main_view import MainView
 
-
 class FileManagerApp(tk.Tk):
     def __init__(self):
         super().__init__()
@@ -18,19 +17,19 @@ class FileManagerApp(tk.Tk):
         self.geometry("1000x600")
 
         # Set the home directory
-        home_directory = "C:\\Cyberkid\\MyProjects\\My_Python\\tkinter\\FileManager"
+        self.home_directory = "C:\\Cyberkid\\MyProjects\\My_Python\\tkinter\\FileManager"
 
         # Create frames for different layers
         tab_frame = ttk.Frame(self)
         tab_frame.pack(side=tk.TOP, fill=tk.X)
 
-        separator1 = ttk.Separator(self, orient='horizontal')   # between tab_frame and nav_frame
+        separator1 = ttk.Separator(self, orient='horizontal')  # between tab_frame and nav_frame
         separator1.pack(side=tk.TOP, fill=tk.X, pady=5)
 
         nav_frame = ttk.Frame(self)
         nav_frame.pack(side=tk.TOP, fill=tk.X)
 
-        separator2 = ttk.Separator(self, orient='horizontal')   # between nav_frame and ribbon_frame
+        separator2 = ttk.Separator(self, orient='horizontal')  # between nav_frame and ribbon_frame
         separator2.pack(side=tk.TOP, fill=tk.X, pady=5)
 
         ribbon_frame = ttk.Frame(self)
@@ -39,25 +38,28 @@ class FileManagerApp(tk.Tk):
         separator3 = ttk.Separator(self, orient='horizontal')
         separator3.pack(side=tk.TOP, fill=tk.X, pady=5)
 
-        # Initialize TabBar (Layer 1), AddressBar (Layer 2), NavigationButtons (Layer 2), SearchBar (Layer 2)
+        # Initialize TabBar (Layer 1)
         self.tab_bar = TabBar(tab_frame)
 
         # Define a method to synchronize the address bar with navigation buttons
         def address_bar_changed(new_path):
             self.navigation_buttons.update_from_address_bar(new_path)
+            self.main_view.load_directory(new_path)  # Update the Main View
 
-        # Initialize Navigation bar
-        self.address_bar = AddressBar(nav_frame, initial_path=home_directory, on_path_change=address_bar_changed)
-        self.navigation_buttons = NavigationButtons(nav_frame, home_directory, self.address_bar.update_address)
+        # Initialize AddressBar (Layer 2)
+        self.address_bar = AddressBar(nav_frame, initial_path=self.home_directory, on_path_change=address_bar_changed)
+
+        # Initialize NavigationButtons (Layer 2)
+        self.navigation_buttons = NavigationButtons(nav_frame, self.home_directory, self.address_bar.update_address)
 
         self.navigation_buttons.pack(side=tk.LEFT, fill=tk.X)
         self.address_bar.pack(side=tk.LEFT, padx=5, fill=tk.X, expand=True)
 
-        # Initialize Search bar
+        # Initialize Search bar (Layer 2)
         self.search_bar = SearchBar(nav_frame)
         self.search_bar.pack(side=tk.RIGHT, padx=5, fill=tk.X)
 
-        # Initialize Ribbon
+        # Initialize Ribbon (Layer 3)
         self.ribbon = Ribbon(ribbon_frame)
         self.ribbon.pack(side=tk.TOP, fill=tk.X)
 
@@ -65,13 +67,18 @@ class FileManagerApp(tk.Tk):
         content_frame = ttk.Frame(self)
         content_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
 
-        # Split content frame into Navigation Pane (25%) and Main View (75%)
-        self.navigation_pane = NavigationPane(content_frame)
+        # Initialize NavigationPane (Layer 4)
+        self.navigation_pane = NavigationPane(content_frame, self.address_bar)
         self.navigation_pane.pack(side=tk.LEFT, fill=tk.Y, expand=False, padx=10, pady=5)
 
+        # Initialize MainView (Layer 4)
         self.main_view = MainView(content_frame)
         self.main_view.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=10, pady=5)
 
 if __name__ == "__main__":
     app = FileManagerApp()
     app.mainloop()
+
+Address Bar and Main View are in Sync
+Address Bar and Navigation Buttons are in Sync
+But Navigation Buttons and Main View are not in Sync, on Clicking Navigation Buttons only the address in the Address Bar changes not the Main View, please Sync Navigation Buttons and Main View
