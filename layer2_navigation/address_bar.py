@@ -6,9 +6,10 @@ import os
 
 
 class AddressBar(ttk.Frame):
-    def __init__(self, parent, initial_path):
+    def __init__(self, parent, initial_path, on_path_change=None):
         super().__init__(parent)
         self.current_path = initial_path
+        self.on_path_change = on_path_change  # Callback for address bar changes
 
         # Create and pack the text box for showing and editing the current path
         self.path_var = tk.StringVar(value=self.current_path)
@@ -23,10 +24,11 @@ class AddressBar(ttk.Frame):
         if os.path.isdir(new_path):
             self.current_path = new_path
             print(f"Changed directory to: {self.current_path}")
-            # Update the content of the application based on the new directory
-            # For now, we just print the new path
+            if self.on_path_change:
+                self.on_path_change(self.current_path)  # Notify callback about the path change
         else:
             messagebox.showerror("Invalid Path", "The path you entered does not exist or is not a directory.")
 
     def update_address(self, path):
-        self.path_var.set(path)
+        if self.path_var.get() != path:
+            self.path_var.set(path)

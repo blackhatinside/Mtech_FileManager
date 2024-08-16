@@ -15,7 +15,7 @@ class FileManagerApp(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title("File Manager")
-        self.geometry("800x600")
+        self.geometry("1000x600")
 
         # Set the home directory
         home_directory = "C:\\Cyberkid\\MyProjects\\My_Python\\tkinter\\FileManager"
@@ -42,8 +42,12 @@ class FileManagerApp(tk.Tk):
         # Initialize TabBar (Layer 1), AddressBar (Layer 2), NavigationButtons (Layer 2), SearchBar (Layer 2)
         self.tab_bar = TabBar(tab_frame)
 
+        # Define a method to synchronize the address bar with navigation buttons
+        def address_bar_changed(new_path):
+            self.navigation_buttons.update_from_address_bar(new_path)
+
         # Initialize Navigation bar
-        self.address_bar = AddressBar(nav_frame, initial_path=home_directory)
+        self.address_bar = AddressBar(nav_frame, initial_path=home_directory, on_path_change=address_bar_changed)
         self.navigation_buttons = NavigationButtons(nav_frame, home_directory, self.address_bar.update_address)
 
         self.navigation_buttons.pack(side=tk.LEFT, fill=tk.X)

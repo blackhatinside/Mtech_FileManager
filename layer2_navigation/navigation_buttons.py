@@ -30,6 +30,13 @@ class NavigationButtons(ttk.Frame):
         self.home_button = ttk.Button(self, text="⌂", command=self.go_home, width=2, padding=5)
         self.home_button.pack(side=tk.LEFT)
 
+        # add initial path to history and increment current index
+        self.history.append(home_directory)
+        self.current_index += 1
+
+        # Print initial path
+        print(f"Initial path: {self.home_directory}")
+
         # Disable buttons initially
         self.update_buttons_state()
 
@@ -38,12 +45,16 @@ class NavigationButtons(ttk.Frame):
             self.current_index -= 1
             self.navigate_to(self.history[self.current_index])
         self.update_buttons_state()
+        print(f"History: {self.history}")
+        print(f"Current Index: {self.current_index}")
 
     def go_forward(self):
         if self.current_index < len(self.history) - 1:
             self.current_index += 1
             self.navigate_to(self.history[self.current_index])
         self.update_buttons_state()
+        print(f"History: {self.history}")
+        print(f"Current Index: {self.current_index}")
 
     def go_up_one_level(self):
         current_path = self.history[self.current_index]
@@ -64,11 +75,16 @@ class NavigationButtons(ttk.Frame):
             self.history = self.history[:self.current_index + 1]
         self.history.append(path)
         self.current_index = len(self.history) - 1
+        print(f"Added to history: {path}")
+        print(f"Updated History: {self.history}")
+        print(f"Items in History: {len(self.history)}")
+        print(f"Current Index: {self.current_index}")
 
     def navigate_to(self, path):
         print(f"Navigating to: {path}")
         self.address_bar_callback(path)  # Update the address bar
         # Code to update the displayed content according to the path
+        self.update_buttons_state()
 
     def update_buttons_state(self):
         # Disable/Enable Backward button
@@ -91,3 +107,19 @@ class NavigationButtons(ttk.Frame):
             self.up_button.config(state=tk.DISABLED)
 
         # Home button is always enabled
+        self.log_button_states()
+
+    def log_button_states(self):
+        states = {
+            "Back": self.back_button.cget("state"),
+            "Forward": self.forward_button.cget("state"),
+            "Up": self.up_button.cget("state"),
+            "Home": self.home_button.cget("state"),
+        }
+        print("Button States:", states)
+
+    def update_from_address_bar(self, path):
+        """ Update navigation history and buttons state from the address bar """
+        if path not in self.history:
+            self.add_to_history(path)
+        self.update_buttons_state()
