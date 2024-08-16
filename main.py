@@ -20,23 +20,16 @@ class FileManagerApp(tk.Tk):
         self.home_directory = "C:\\Cyberkid\\MyProjects\\My_Python\\tkinter\\FileManager"
 
         # Create frames for different layers
-        tab_frame = ttk.Frame(self)
-        tab_frame.pack(side=tk.TOP, fill=tk.X)
+        tab_frame = self.create_frame()
+        separator1 = self.create_separator()  # between tab_frame and nav_frame
 
-        separator1 = ttk.Separator(self, orient='horizontal')  # between tab_frame and nav_frame
-        separator1.pack(side=tk.TOP, fill=tk.X, pady=5)
+        nav_frame = self.create_frame()
+        separator2 = self.create_separator()  # between nav_frame and ribbon_frame
 
-        nav_frame = ttk.Frame(self)
-        nav_frame.pack(side=tk.TOP, fill=tk.X)
+        ribbon_frame = self.create_frame()
+        separator3 = self.create_separator()
 
-        separator2 = ttk.Separator(self, orient='horizontal')  # between nav_frame and ribbon_frame
-        separator2.pack(side=tk.TOP, fill=tk.X, pady=5)
-
-        ribbon_frame = ttk.Frame(self)
-        ribbon_frame.pack(side=tk.TOP, fill=tk.X)
-
-        separator3 = ttk.Separator(self, orient='horizontal')
-        separator3.pack(side=tk.TOP, fill=tk.X, pady=5)
+        content_frame = self.create_frame(fill=tk.BOTH, expand=True)
 
         # Initialize TabBar (Layer 1)
         self.tab_bar = TabBar(tab_frame)
@@ -49,12 +42,9 @@ class FileManagerApp(tk.Tk):
         def update_main_view(new_path):
             self.main_view.load_directory(new_path)
 
-        # Initialize AddressBar (Layer 2)
+        # Initialize AddressBar (Layer 2) and NavigationButtons (Layer 2)
         self.address_bar = AddressBar(nav_frame, initial_path=self.home_directory, on_path_change=address_bar_changed)
-
-        # Initialize NavigationButtons (Layer 2)
         self.navigation_buttons = NavigationButtons(nav_frame, self.home_directory, self.address_bar.update_address, update_main_view)
-
         self.navigation_buttons.pack(side=tk.LEFT, fill=tk.X)
         self.address_bar.pack(side=tk.LEFT, padx=5, fill=tk.X, expand=True)
 
@@ -66,10 +56,6 @@ class FileManagerApp(tk.Tk):
         self.ribbon = Ribbon(ribbon_frame)
         self.ribbon.pack(side=tk.TOP, fill=tk.X)
 
-        # Initialize Layer 4: Navigation Pane and Main View
-        content_frame = ttk.Frame(self)
-        content_frame.pack(side=tk.TOP, fill=tk.BOTH, expand=True)
-
         # Initialize NavigationPane (Layer 4)
         self.navigation_pane = NavigationPane(content_frame, self.address_bar)
         self.navigation_pane.pack(side=tk.LEFT, fill=tk.Y, expand=False, padx=10, pady=5)
@@ -77,6 +63,16 @@ class FileManagerApp(tk.Tk):
         # Initialize MainView (Layer 4)
         self.main_view = MainView(content_frame)
         self.main_view.pack(side=tk.LEFT, fill=tk.BOTH, expand=True, padx=10, pady=5)
+
+    def create_frame(self, side=tk.TOP, fill=tk.X, expand=False):
+        frame = ttk.Frame(self)
+        frame.pack(side=side, fill=fill, expand=expand)
+        return frame
+
+    def create_separator(self, side=tk.TOP, fill=tk.X, pady=5, orient='horizontal'):
+        separator = ttk.Separator(self, orient=orient)
+        separator.pack(side=side, fill=fill)
+        return separator
 
 if __name__ == "__main__":
     app = FileManagerApp()

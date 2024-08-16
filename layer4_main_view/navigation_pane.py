@@ -4,7 +4,7 @@ import tkinter as tk
 from tkinter import ttk
 
 class NavigationPane(ttk.Frame):
-    def __init__(self, parent, address_bar):
+    def __init__(self, parent, address_bar, on_path_change=None):
         super().__init__(parent)
         self.bookmarks = {}  # Dictionary to store bookmarks (folder name -> path)
         self.address_bar = address_bar  # Reference to the address bar
@@ -28,6 +28,7 @@ class NavigationPane(ttk.Frame):
 
     def add_bookmark(self):
         current_path = self.address_bar.get_current_path()  # Get the current path from address bar
+        print("current_path: ", current_path)
         if current_path:
             folder_name = current_path.split("\\")[-1][:16]  # Get the last part of the path and crop to 16 characters
             if folder_name not in self.bookmarks:
