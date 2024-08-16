@@ -4,15 +4,14 @@ import tkinter as tk
 from tkinter import ttk
 import os
 
-
 class NavigationButtons(ttk.Frame):
-    def __init__(self, parent, home_directory, address_bar_callback):
+    def __init__(self, parent, home_directory, address_bar_callback, main_view_callback):
         super().__init__(parent)
-
         self.history = []  # List to keep track of visited directories
         self.current_index = -1  # To track the current position in the history
         self.home_directory = home_directory  # Set the home directory
         self.address_bar_callback = address_bar_callback  # Callback to update the address bar
+        self.main_view_callback = main_view_callback  # Callback to update the main view
 
         # Backward Button
         self.back_button = ttk.Button(self, text="<", command=self.go_backward, width=2, padding=5)
@@ -83,7 +82,7 @@ class NavigationButtons(ttk.Frame):
     def navigate_to(self, path):
         print(f"Navigating to: {path}")
         self.address_bar_callback(path)  # Update the address bar
-        # Code to update the displayed content according to the path
+        self.main_view_callback(path)  # Update the main view
         self.update_buttons_state()
 
     def update_buttons_state(self):

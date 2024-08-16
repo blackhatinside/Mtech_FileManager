@@ -6,7 +6,7 @@ from tkinter import ttk
 class NavigationPane(ttk.Frame):
     def __init__(self, parent, address_bar):
         super().__init__(parent)
-        self.bookmarks = []  # List to store bookmarks (paths)
+        self.bookmarks = {}  # Dictionary to store bookmarks (folder name -> path)
         self.address_bar = address_bar  # Reference to the address bar
 
         # Title and '+' button for Bookmarks
@@ -29,15 +29,16 @@ class NavigationPane(ttk.Frame):
     def add_bookmark(self):
         current_path = self.address_bar.get_current_path()  # Get the current path from address bar
         if current_path:
-            if current_path not in self.bookmarks:
-                self.bookmarks.append(current_path)
+            folder_name = current_path.split("\\")[-1][:16]  # Get the last part of the path and crop to 16 characters
+            if folder_name not in self.bookmarks:
+                self.bookmarks[folder_name] = current_path
                 self.refresh_bookmarks()
             else:
-                print(f"Bookmark '{current_path}' already exists.")
+                print(f"Bookmark '{folder_name}' already exists.")
 
-    def remove_bookmark(self, bookmark):
-        if bookmark in self.bookmarks:
-            self.bookmarks.remove(bookmark)
+    def remove_bookmark(self, folder_name):
+        if folder_name in self.bookmarks:
+            del self.bookmarks[folder_name]
             self.refresh_bookmarks()
 
     def refresh_bookmarks(self):
@@ -46,22 +47,24 @@ class NavigationPane(ttk.Frame):
             widget.destroy()
 
         # Display the updated list of bookmarks
-        for bookmark in self.bookmarks:
+        for folder_name, path in self.bookmarks.items():
             bookmark_frame = ttk.Frame(self.bookmark_list_frame)
             bookmark_frame.pack(fill=tk.X, pady=2)
 
-            bookmark_label = ttk.Label(bookmark_frame, text=bookmark)
+            bookmark_label = ttk.Label(bookmark_frame, text=folder_name)
             bookmark_label.pack(side=tk.LEFT, padx=5)
 
-            remove_button = ttk.Button(bookmark_frame, text="X", width=2, command=lambda b=bookmark: self.remove_bookmark(b))
+            remove_button = ttk.Button(bookmark_frame, text="X", width=2, command=lambda fn=folder_name: self.remove_bookmark(fn))
             remove_button.pack(side=tk.RIGHT, padx=5)
 
             # Bind double-click to navigate to the bookmarked path
-            bookmark_label.bind("<Double-1>", lambda e, b=bookmark: self.on_bookmark_selected(b))
+            bookmark_label.bind("<Double-1>", lambda e, p=path: self.on_bookmark_selected(p))
 
     def on_bookmark_selected(self, path):
         print(f"Bookmark selected: {path}")
-        # Implement navigation to the selected path
+        self.address_bar.update_address(path)
+        # Here, trigger the update of the main view as well
+
 
 # Usage in the main view
 if __name__ == "__main__":
@@ -73,6 +76,9 @@ if __name__ == "__main__":
     class DummyAddressBar:
         def get_current_path(self):
             return "C:\\path\\to\\current\\directory"  # Example path
+
+        def update_address(self, path):
+            print(f"Address bar updated to: {path}")
 
     address_bar = DummyAddressBar()
     nav_pane = NavigationPane(root, address_bar=address_bar)

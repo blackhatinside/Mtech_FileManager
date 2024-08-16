@@ -46,11 +46,14 @@ class FileManagerApp(tk.Tk):
             self.navigation_buttons.update_from_address_bar(new_path)
             self.main_view.load_directory(new_path)  # Update the Main View
 
+        def update_main_view(new_path):
+            self.main_view.load_directory(new_path)
+
         # Initialize AddressBar (Layer 2)
         self.address_bar = AddressBar(nav_frame, initial_path=self.home_directory, on_path_change=address_bar_changed)
 
         # Initialize NavigationButtons (Layer 2)
-        self.navigation_buttons = NavigationButtons(nav_frame, self.home_directory, self.address_bar.update_address)
+        self.navigation_buttons = NavigationButtons(nav_frame, self.home_directory, self.address_bar.update_address, update_main_view)
 
         self.navigation_buttons.pack(side=tk.LEFT, fill=tk.X)
         self.address_bar.pack(side=tk.LEFT, padx=5, fill=tk.X, expand=True)
@@ -78,7 +81,3 @@ class FileManagerApp(tk.Tk):
 if __name__ == "__main__":
     app = FileManagerApp()
     app.mainloop()
-
-Address Bar and Main View are in Sync
-Address Bar and Navigation Buttons are in Sync
-But Navigation Buttons and Main View are not in Sync, on Clicking Navigation Buttons only the address in the Address Bar changes not the Main View, please Sync Navigation Buttons and Main View
