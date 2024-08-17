@@ -4,7 +4,6 @@ import tkinter as tk
 from tkinter import ttk, simpledialog
 import uuid  # for generating unique Tab IDs
 
-
 class TabButton(ttk.Frame):
     def __init__(self, parent, remove_callback):
         super().__init__(parent)

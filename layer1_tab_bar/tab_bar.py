@@ -4,7 +4,6 @@ import tkinter as tk
 from tkinter import ttk
 from .tab_button import TabButton
 
-
 class TabBar(ttk.Frame):
     MAX_TABS = 8  # Define the maximum number of tabs
 

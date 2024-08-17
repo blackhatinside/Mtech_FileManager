@@ -8,6 +8,7 @@ class NavigationPane(ttk.Frame):
         super().__init__(parent)
         self.bookmarks = {}  # Dictionary to store bookmarks (folder name -> path)
         self.address_bar = address_bar  # Reference to the address bar
+        self.current_path = address_bar.current_path
 
         # Title and '+' button for Bookmarks
         title_frame = ttk.Frame(self)
@@ -27,12 +28,12 @@ class NavigationPane(ttk.Frame):
         self.refresh_bookmarks()
 
     def add_bookmark(self):
-        current_path = self.address_bar.get_current_path()  # Get the current path from address bar
-        print("current_path: ", current_path)
-        if current_path:
-            folder_name = current_path.split("\\")[-1][:16]  # Get the last part of the path and crop to 16 characters
+        self.current_path = self.address_bar.get_current_path()  # Get the current path from address bar
+        print("current_path: ", self.current_path)
+        if self.current_path:
+            folder_name = self.current_path.split("\\")[-1][:16]  # Get the last part of the path and crop to 16 characters
             if folder_name not in self.bookmarks:
-                self.bookmarks[folder_name] = current_path
+                self.bookmarks[folder_name] = self.current_path
                 self.refresh_bookmarks()
             else:
                 print(f"Bookmark '{folder_name}' already exists.")
@@ -65,25 +66,3 @@ class NavigationPane(ttk.Frame):
         print(f"Bookmark selected: {path}")
         self.address_bar.update_address(path)
         # Here, trigger the update of the main view as well
-
-
-# Usage in the main view
-if __name__ == "__main__":
-    root = tk.Tk()
-    root.title("Navigation Pane Test")
-    root.geometry("300x400")
-
-    # Dummy address bar for testing
-    class DummyAddressBar:
-        def get_current_path(self):
-            return "C:\\path\\to\\current\\directory"  # Example path
-
-        def update_address(self, path):
-            print(f"Address bar updated to: {path}")
-
-    address_bar = DummyAddressBar()
-    nav_pane = NavigationPane(root, address_bar=address_bar)
-    nav_pane.pack(fill=tk.BOTH, expand=True)
-
-    root.mainloop()
-

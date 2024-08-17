@@ -1,10 +1,7 @@
-# FileManager/layer4_main_view/main_view.py
-
 import tkinter as tk
 from tkinter import ttk
 import os
 import time
-
 
 class MainView(ttk.Frame):
     def __init__(self, parent):
@@ -33,13 +30,18 @@ class MainView(ttk.Frame):
         self.tree.config(yscrollcommand=self.scrollbar.set)
         self.scrollbar.pack(side=tk.RIGHT, fill=tk.Y)
         
+        # Initialize current path
+        self.current_path = ""
+
         # Load initial directory
         self.load_directory("C:\\")  # This can be updated later to reflect the actual directory
 
-        # Bind single click event
+        # Bind single and double click events
         self.tree.bind("<ButtonRelease-1>", self.on_item_click)
+        self.tree.bind("<Double-1>", self.on_item_double_click)
 
     def load_directory(self, path):
+        self.current_path = path  # Update current path
         # Clear the treeview
         for item in self.tree.get_children():
             self.tree.delete(item)
@@ -73,3 +75,13 @@ class MainView(ttk.Frame):
         if item:
             item_values = self.tree.item(item[0], 'values')
             print(f"Selected: {item_values}")
+
+    def on_item_double_click(self, event):
+        item = self.tree.selection()
+        if item:
+            item_values = self.tree.item(item[0], 'values')
+            if item_values[3] == "Folder":
+                selected_path = os.path.join(self.current_path, item_values[0])
+                if os.path.isdir(selected_path):
+                    self.load_directory(selected_path)
+                    print(f"Opened folder: {selected_path}")

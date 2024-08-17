@@ -37,6 +37,7 @@ class FileManagerApp(tk.Tk):
         # Define a method to synchronize the address bar with navigation buttons
         def address_bar_changed(new_path):
             self.navigation_buttons.update_from_address_bar(new_path)
+            # self.navigation_pane.update_from_address_bar(new_path)
             self.main_view.load_directory(new_path)  # Update the Main View
 
         def update_main_view(new_path):
@@ -57,7 +58,7 @@ class FileManagerApp(tk.Tk):
         self.ribbon.pack(side=tk.TOP, fill=tk.X)
 
         # Initialize NavigationPane (Layer 4)
-        self.navigation_pane = NavigationPane(content_frame, self.address_bar)
+        self.navigation_pane = NavigationPane(content_frame, self.address_bar, on_path_change=address_bar_changed)
         self.navigation_pane.pack(side=tk.LEFT, fill=tk.Y, expand=False, padx=10, pady=5)
 
         # Initialize MainView (Layer 4)

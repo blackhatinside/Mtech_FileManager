@@ -34,4 +34,3 @@ class AddressBar(ttk.Frame):
 
     def get_current_path(self):
         return self.current_path
-
