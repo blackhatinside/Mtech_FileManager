@@ -5,6 +5,7 @@ from tkinter import ttk, simpledialog
 import uuid  # for generating unique Tab IDs
 
 class TabButton(ttk.Frame):
+    tab_counter = 1 # class variable, accessing from all objects
     def __init__(self, parent, remove_callback):
         super().__init__(parent)
 
@@ -13,7 +14,7 @@ class TabButton(ttk.Frame):
         self.remove_callback = remove_callback
 
         # Set initial tab label
-        self.label_text = tk.StringVar(value="New Tab")
+        self.label_text = tk.StringVar(value="New Tab {}".format(TabButton.tab_counter))
 
         # Label for the tab
         self.label = ttk.Label(self, textvariable=self.label_text)
@@ -25,11 +26,13 @@ class TabButton(ttk.Frame):
 
         # Bind double-click event to the label for renaming
         self.label.bind("<Double-1>", self.rename_tab)
+        TabButton.tab_counter += 1
 
     def close_tab(self):
         print(f"Closing tab: {self.tab_id}")
         self.remove_callback(self.tab_id)  # Notify the parent to remove the tab
         self.destroy()
+        TabButton.tab_counter -= 1
 
     def rename_tab(self, event):
         old_name = self.label_text.get()

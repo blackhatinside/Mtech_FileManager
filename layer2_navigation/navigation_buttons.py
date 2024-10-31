@@ -1,114 +1,110 @@
 # FileManager/layer2_navigation/navigation_buttons.py
 
 import tkinter as tk
-from tkinter import ttk
+from tkinter import ttk, messagebox
 import os
 
 class NavigationButtons(ttk.Frame):
-    def __init__(self, parent, home_directory, address_bar_callback, main_view_callback):
+    def __init__(self, parent, navigation_manager):
         super().__init__(parent)
-        self.history = []  # List to keep track of visited directories
-        self.current_index = -1  # To track the current position in the history
-        self.home_directory = home_directory  # Set the home directory
-        self.address_bar_callback = address_bar_callback  # Callback to update the address bar
-        self.main_view_callback = main_view_callback  # Callback to update the main view
+        self.navigation_manager = navigation_manager
 
-        # Backward Button
-        self.back_button = ttk.Button(self, text="<", command=self.go_backward, width=2, padding=5)
-        self.back_button.pack(side=tk.LEFT)
+        # Create buttons with tooltips
+        self.back_button = self.create_button("<", self.go_backward, "Go back")
+        self.forward_button = self.create_button(">", self.go_forward, "Go forward")
+        self.up_button = self.create_button("↑", self.go_up_one_level, "Go up one level")
+        self.home_button = self.create_button("⌂", self.go_home, "Go to home directory")
 
-        # Forward Button
-        self.forward_button = ttk.Button(self, text=">", command=self.go_forward, width=2, padding=5)
-        self.forward_button.pack(side=tk.LEFT)
-
-        # Previous Level Directory Button
-        self.up_button = ttk.Button(self, text="↑", command=self.go_up_one_level, width=2, padding=5)
-        self.up_button.pack(side=tk.LEFT)
-
-        # Home Directory Button
-        self.home_button = ttk.Button(self, text="⌂", command=self.go_home, width=2, padding=5)
-        self.home_button.pack(side=tk.LEFT)
-
-        # add initial path to history and increment current index
-        self.history.append(home_directory)
-        self.current_index += 1
-
-        # Print initial path
-        print(f"Initial path: {self.home_directory}")
-
-        # Disable buttons initially
+        # Initial button state update
         self.update_buttons_state()
+
+    def create_button(self, text, command, tooltip):
+        """Create a navigation button with tooltip"""
+        btn = ttk.Button(self, text=text, command=command, width=2, padding=5)
+        btn.pack(side=tk.LEFT, padx=2)
+        self.create_tooltip(btn, tooltip)
+        return btn
+
+    def create_tooltip(self, widget, text):
+        """Create tooltip for navigation buttons"""
+        def show_tooltip(event):
+            x, y, _, _ = widget.bbox("insert")
+            x += widget.winfo_rootx() + 25
+            y += widget.winfo_rooty() + 20
+
+            # Creates a toplevel window
+            self.tooltip = tk.Toplevel(widget)
+            self.tooltip.wm_overrideredirect(True)
+            self.tooltip.wm_geometry(f"+{x}+{y}")
+
+            label = ttk.Label(self.tooltip, text=text, background="#ffffe0",
+                            relief='solid', borderwidth=1)
+            label.pack()
+
+        def hide_tooltip(event):
+            if hasattr(self, 'tooltip'):
+                self.tooltip.destroy()
+
+        widget.bind('<Enter>', show_tooltip)
+        widget.bind('<Leave>', hide_tooltip)
 
     def go_backward(self):
-        if self.current_index > 0:
-            self.current_index -= 1
-            self.navigate_to(self.history[self.current_index])
+        """Navigate to previous directory in history"""
+        self.navigation_manager.go_back()
         self.update_buttons_state()
-        print(f"History: {self.history}")
-        print(f"Current Index: {self.current_index}")
 
     def go_forward(self):
-        if self.current_index < len(self.history) - 1:
-            self.current_index += 1
-            self.navigate_to(self.history[self.current_index])
+        """Navigate to next directory in history"""
+        self.navigation_manager.go_forward()
         self.update_buttons_state()
-        print(f"History: {self.history}")
-        print(f"Current Index: {self.current_index}")
 
     def go_up_one_level(self):
-        current_path = self.history[self.current_index]
-        parent_path = os.path.dirname(current_path)
-        if os.path.exists(parent_path):
-            self.add_to_history(parent_path)
-            self.navigate_to(parent_path)
+        """Navigate to parent directory"""
+        current_path = self.navigation_manager.get_current_path()
+        if current_path:
+            parent_path = os.path.dirname(current_path)
+            if os.path.exists(parent_path) and parent_path != current_path:
+                self.navigation_manager.navigate_to(parent_path, 'nav_buttons')
         self.update_buttons_state()
 
     def go_home(self):
-        self.add_to_history(self.home_directory)
-        self.navigate_to(self.home_directory)
-        self.update_buttons_state()
-
-    def add_to_history(self, path):
-        # If navigating to a new path, truncate the forward history
-        if self.current_index < len(self.history) - 1:
-            self.history = self.history[:self.current_index + 1]
-        self.history.append(path)
-        self.current_index = len(self.history) - 1
-        print(f"Added to history: {path}")
-        print(f"Updated History: {self.history}")
-        print(f"Items in History: {len(self.history)}")
-        print(f"Current Index: {self.current_index}")
-
-    def navigate_to(self, path):
-        print(f"Navigating to: {path}")
-        self.address_bar_callback(path)  # Update the address bar
-        self.main_view_callback(path)  # Update the main view
+        """Navigate to home directory"""
+        home_dir = os.path.expanduser("~")
+        self.navigation_manager.navigate_to(home_dir, 'nav_buttons')
         self.update_buttons_state()
 
     def update_buttons_state(self):
-        # Disable/Enable Backward button
-        if self.current_index > 0:
-            self.back_button.config(state=tk.NORMAL)
-        else:
-            self.back_button.config(state=tk.DISABLED)
+        """Update the state of navigation buttons"""
+        # Enable/disable back button
+        self.back_button.config(
+            state=tk.NORMAL if self.navigation_manager.can_go_back() else tk.DISABLED
+        )
 
-        # Disable/Enable Forward button
-        if self.current_index < len(self.history) - 1:
-            self.forward_button.config(state=tk.NORMAL)
-        else:
-            self.forward_button.config(state=tk.DISABLED)
+        # Enable/disable forward button
+        self.forward_button.config(
+            state=tk.NORMAL if self.navigation_manager.can_go_forward() else tk.DISABLED
+        )
 
-        # Disable/Enable Up button
-        current_path = self.history[self.current_index] if self.current_index >= 0 else None
-        if current_path and os.path.dirname(current_path) != current_path:
-            self.up_button.config(state=tk.NORMAL)
+        # Enable/disable up button based on current path
+        current_path = self.navigation_manager.get_current_path()
+        if current_path:
+            parent_path = os.path.dirname(current_path)
+            # Enable up button if current path has a parent and is not at root
+            self.up_button.config(
+                state=tk.NORMAL if os.path.exists(parent_path) and
+                                 parent_path != current_path else tk.DISABLED
+            )
         else:
             self.up_button.config(state=tk.DISABLED)
 
         # Home button is always enabled
-        self.log_button_states()
+        self.home_button.config(state=tk.NORMAL)
 
-    def log_button_states(self):
+        # Log current states for debugging
+        self._log_button_states()
+
+    def _log_button_states(self):
+        """Log the current state of all navigation buttons"""
         states = {
             "Back": self.back_button.cget("state"),
             "Forward": self.forward_button.cget("state"),
@@ -117,8 +113,11 @@ class NavigationButtons(ttk.Frame):
         }
         print("Button States:", states)
 
-    def update_from_address_bar(self, path):
-        """ Update navigation history and buttons state from the address bar """
-        if path not in self.history:
-            self.add_to_history(path)
-        self.update_buttons_state()
+    def handle_error(self, operation, error):
+        """Central error handling for navigation operations"""
+        error_msg = str(error)
+        print(f"Error during {operation}: {error_msg}")
+        messagebox.showerror(
+            f"Navigation Error - {operation}",
+            f"An error occurred while navigating:\n{error_msg}"
+        )
