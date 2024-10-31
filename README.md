@@ -28,6 +28,9 @@ FileManager/
 └── main.py
 ```
 
+
+SRS:
+
 Layer 1:
     Tab bar
         Should show all the open tabs
@@ -55,17 +58,3 @@ Layer 4:
         Ability to view files
         Ability to navigate through files and folders
         Ability to view the details of files and folders
-
-Delete all the previous files in your memory, if we had previously worked on this project. Now I will share the current progress Files one by one store them in your memory. Once I am done sharing the files I will send "done" wait for my "done" message dont reply back until then. Once I send "done" show me the list of files in your memory, then I will give you the tasks. 
-
-Always try to integrate new features, without removing any existing code or features.
-
-Address Bar and Main View are in Sync
-Address Bar and Navigation Buttons are in Sync
-Navigation Buttons and Main View are in Sync
-Bookmarks and Address Bar are in Sync
-
-ISSUES
-No Sync between Navigation Buttons and Double Click
-No Sync between Navigation Buttons and Bookmarks
-No Sync between Double Click and Bookmarks
