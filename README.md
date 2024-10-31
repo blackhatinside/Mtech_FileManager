@@ -28,7 +28,7 @@ FileManager/
 └── main.py
 ```
 
-
+````
 SRS:
 
 Layer 1:
@@ -36,6 +36,7 @@ Layer 1:
         Should show all the open tabs
         Should have a "add new tab" button
         Should be able to rename Tabs
+        Tabs should have unique name and ID
 Layer 2:
     Navigation buttons
         Forward
@@ -46,7 +47,7 @@ Layer 2:
         Should have a Text box showing current path address
         Ability to move across valid directories using just path address and error handling if path invalid
     Search Bar
-        Search for Files in Current Directory and highlight that file
+        Search for Files/Folders dynamically in current directory and highlight them
 Layer 3:
     Ribbon:
         Should contain buttons for file management tools like Cut, Copy, Paste, Delete, Rename and Sort current directory
@@ -58,3 +59,4 @@ Layer 4:
         Ability to view files
         Ability to navigate through files and folders
         Ability to view the details of files and folders
+```
