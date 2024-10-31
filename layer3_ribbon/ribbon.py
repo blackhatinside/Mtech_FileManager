@@ -6,7 +6,7 @@ from tkinter import ttk
 class Ribbon(ttk.Frame):
     def __init__(self, parent):
         super().__init__(parent)
-        
+
         # Create buttons for file management tools
         self.new_button = ttk.Button(self, text="New", width=0, command=lambda: self._button_pressed("New"))
         self.cut_button = ttk.Button(self, text="Cut", width=0, command=lambda: self._button_pressed("Cut"))
@@ -15,7 +15,7 @@ class Ribbon(ttk.Frame):
         self.delete_button = ttk.Button(self, text="Delete", width=0, command=lambda: self._button_pressed("Delete"))
         self.rename_button = ttk.Button(self, text="Rename", width=0, command=lambda: self._button_pressed("Rename"))
         self.sort_button = ttk.Button(self, text="Sort", width=0, command=lambda: self._button_pressed("Sort"))
-        
+
         # Pack the buttons in a horizontal row
         self.new_button.pack(side=tk.LEFT, pady=5)
         self.cut_button.pack(side=tk.LEFT, pady=5)

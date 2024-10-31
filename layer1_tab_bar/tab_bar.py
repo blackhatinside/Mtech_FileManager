@@ -42,7 +42,7 @@ class TabBar(ttk.Frame):
         else:
             print(f"Tab {tab_id} not found.")
         self.update_add_tab_button_state()
-    
+
     def update_add_tab_button_state(self):
         """ Enable or disable the add tab button based on the number of open tabs """
         current_tab_count = len(self.open_tabs)

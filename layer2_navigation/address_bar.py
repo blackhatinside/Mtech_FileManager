@@ -14,10 +14,10 @@ class AddressBar(ttk.Frame):
         self.path_var = tk.StringVar(value=self.current_path)
         self.path_entry = ttk.Entry(self, textvariable=self.path_var, width=75)
         self.path_entry.pack(padx=5, pady=5, fill=tk.X)
-        
+
         # Bind the Enter key to trigger path change
         self.path_entry.bind("<Return>", self.change_directory)
-    
+
     def change_directory(self, event):
         new_path = self.path_var.get()
         if os.path.isdir(new_path):
