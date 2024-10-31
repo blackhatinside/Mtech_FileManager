@@ -1,5 +1,6 @@
 We are going to build a File Manager Project in Python. Here is the File Structure and Project Description:
 
+``` ProjectFileStructure
 FileManager/
 │
 ├── layer1_tab_bar/
@@ -25,7 +26,7 @@ FileManager/
 │   └── bookmarks.py
 │
 └── main.py
-
+```
 
 Layer 1:
     Tab bar
